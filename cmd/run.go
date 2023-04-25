@@ -10,6 +10,7 @@ import (
 	"github.com/mulmuri/grassflow/cmd/rollback"
 	"github.com/mulmuri/grassflow/cmd/static"
 	"github.com/mulmuri/grassflow/cmd/version"
+	"github.com/mulmuri/grassflow/cmd/form"
 )
 
 
@@ -17,37 +18,25 @@ import (
 func main() {
 
 	workflowName := os.Args[1]
-	args := os.Args[2:]
+	newArgs := os.Args[2:]
 
-	argMap := make(map[string][]string)
-
-	if len(args) != 0 && args[0][0] != '-' {
-		err := errors.New("unknown parameter")
-		log.Fatal(err)
-		return
+	if (newArgs[0] == "-v" || newArgs[0] == "--version" || newArgs[0] == "v") {
+		workflowName = "version"
+		newArgs = []string{}
 	}
 
-	var prevArg []string
-
-	for _, arg := range args {
-		if arg[0] == '-' {
-			argMap[arg] = make([]string, 0)
-			prevArg = argMap[arg]
-		} else {
-			prevArg = append(prevArg, arg)
-		}
-	}
+	argument := form.NewWithParsing(newArgs)
 
 	switch workflowName {
 
 	case execute.WorkflowName:
-		execute.Run(argMap)
+		execute.Run(argument)
 
 	case rollback.WorkflowName:
-		rollback.Run(argMap)
+		rollback.Run(argument)
 	
 	case static.WorkflowName:
-		static.Run(argMap)
+		static.Run(argument)
 
 	case help.WorkflowName:
 		help.Run()
