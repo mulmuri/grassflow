@@ -2,10 +2,25 @@ package shell
 
 import (
 	"context"
+	"os"
+	"os/exec"
 	"testing"
 )
 
 
+
+func TestMain(m *testing.M) {
+
+	if err := os.Chdir("../../../test"); err != nil {
+		panic(err)
+	}
+
+	cmd := exec.Command("git", "init")
+	cmd.Run()
+	
+	code := m.Run()
+	os.Exit(code)
+}
 
 
 func TestRun(t *testing.T) {

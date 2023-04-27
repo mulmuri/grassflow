@@ -1,9 +1,7 @@
 package form
 
-import (
-	"errors"
-	"fmt"
-)
+import "fmt"
+
 
 
 func (a *Argument) Contains(argName string) bool {
@@ -16,8 +14,7 @@ func (a *Argument) Contains(argName string) bool {
 func (a *Argument) ShouldExist(argName string) error {
 
 	if !a.Contains(argName) {
-		msg := fmt.Sprintf("it should contain argument: %s", argName)
-		return errors.New(msg)
+		return fmt.Errorf("it should contain argument: %s", argName)
 	}
 
 	return nil
@@ -34,8 +31,7 @@ func (a *Argument) ShouldContainMany(argName string) ([]string, error) {
 	argList := a.argMap[argName]
 
 	if len(argList) == 0 {
-		msg := fmt.Sprintf("it should contain at least one argument: %s", argName)
-		return nil, errors.New(msg)
+		return nil, fmt.Errorf("it should contain at least one argument: %s", argName)
 	}
 
 	return argList, nil
@@ -52,8 +48,7 @@ func (a *Argument) ShouldContainOne(argName string) (string, error) {
 	argList := a.argMap[argName]
 
 	if len(argList) != 1 {
-		msg := fmt.Sprintf("it should contain only one argument: %s", argName)
-		return "", errors.New(msg)
+		return "", fmt.Errorf("it should contain only one argument: %s", argName)
 	}
 
 	return argList[0], nil
@@ -70,8 +65,7 @@ func (a *Argument) ShouldContainNone(argName string) error {
 	argList := a.argMap[argName]
 
 	if len(argList) != 0 {
-		msg := fmt.Sprintf("it should contain at least one argument: %s", argName)
-		return errors.New(msg)
+		return fmt.Errorf("it should contain at least one argument: %s", argName)
 	}
 
 	return nil

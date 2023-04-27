@@ -1,7 +1,7 @@
-package static
+package statistic
 
 import (
-	"errors"
+	"fmt"
 
 	"github.com/mulmuri/grassflow/cmd/form"
 )
@@ -11,5 +11,5 @@ var WorkflowName = "static"
 
 
 func Run(*form.Argument) error {
-	return errors.New("static command is not available now")
+	return fmt.Errorf("static command is not available now")
 }

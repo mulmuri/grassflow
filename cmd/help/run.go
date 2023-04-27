@@ -1,6 +1,6 @@
 package help
 
-import "errors"
+import "fmt"
 
 var WorkflowName = "help"
 
@@ -8,5 +8,5 @@ var WorkflowName = "help"
 
 
 func Run() error {
-	return errors.New("help command is not available now")
+	return fmt.Errorf("help command is not available now")
 }

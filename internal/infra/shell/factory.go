@@ -3,7 +3,7 @@ package shell
 import (
 	"bytes"
 	"context"
-	"errors"
+	"fmt"
 	"os/exec"
 	"strings"
 )
@@ -19,7 +19,7 @@ func Run(ctx context.Context, command string) error {
 	cmd.Stderr = &stderr
 
 	if err := cmd.Run(); err != nil {
-		return errors.New(stderr.String())
+		return fmt.Errorf(stderr.String())
 	}
 	return nil
 }
@@ -33,7 +33,7 @@ func Output(ctx context.Context, command string) (string, error) {
 	cmd.Stdout = &stdout
 
 	if err := cmd.Run(); err != nil {
-		return stdout.String(), errors.New(stderr.String())
+		return stdout.String(), fmt.Errorf(stderr.String())
 	}
 
 	return stdout.String(), nil

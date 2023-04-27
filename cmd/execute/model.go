@@ -1,7 +1,7 @@
 package execute
 
 import (
-	"errors"
+	"fmt"
 	"io/ioutil"
 
 	"gopkg.in/yaml.v2"
@@ -26,7 +26,7 @@ func ReadYML(fileName string, config *YamlConfig) error {
 	data, err := ioutil.ReadFile(fileName)
 
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to read yml file: %v", err)
 	}
 
 	if err := yaml.Unmarshal(data, &config); err != nil {
@@ -34,7 +34,7 @@ func ReadYML(fileName string, config *YamlConfig) error {
 	}
 
 	if len(config.TaskConfig) == 0 {
-		return errors.New("There is no task listed or file form is incorrect")
+		return fmt.Errorf("There is no task listed or file form is incorrect")
 	}	
 
 	return nil

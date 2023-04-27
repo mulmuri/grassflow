@@ -1,7 +1,7 @@
 package rollback
 
 import (
-	"errors"
+	"fmt"
 
 	"github.com/mulmuri/grassflow/cmd/form"
 )
@@ -12,5 +12,5 @@ var WorkflowName = "rollback"
 
 
 func Run(*form.Argument) error {
-	return errors.New("rollback command is not available now")
+	return fmt.Errorf("rollback command is not available now")
 }
