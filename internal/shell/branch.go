@@ -39,6 +39,13 @@ func CreateBranch(ctx context.Context, branch string) error {
 
 
 
+func CreateCheckout(ctx context.Context, branch string) error {
+	cmd := fmt.Sprintf("git checkout -b %s", branch)
+	return run(ctx, cmd)
+}
+
+
+
 func Checkout(ctx context.Context, branch string) error {
 	cmd := fmt.Sprintf("git checkout %s", branch)
 	return run(ctx, cmd)
