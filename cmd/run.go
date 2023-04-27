@@ -17,6 +17,8 @@ import (
 
 func main() {
 
+	var err error
+
 	workflowName := os.Args[1]
 	newArgs := os.Args[2:]
 
@@ -30,23 +32,25 @@ func main() {
 	switch workflowName {
 
 	case execute.WorkflowName:
-		execute.Run(argument)
+		err = execute.Run(argument)
 
 	case rollback.WorkflowName:
-		rollback.Run(argument)
+		err = rollback.Run(argument)
 	
 	case static.WorkflowName:
-		static.Run(argument)
+		err = static.Run(argument)
 
 	case help.WorkflowName:
-		help.Run()
+		err = help.Run()
 
 	case version.WorkflowName:
 		version.Run()
 
 	default:
-		err := errors.New("unknown parameter")
+		err = errors.New("unknown parameter")
+	}
+
+	if err != nil {
 		log.Fatal(err)
-		return
-	}	
+	}
 }
