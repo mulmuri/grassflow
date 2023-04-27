@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -10,7 +9,7 @@ import (
 	"github.com/mulmuri/grassflow/cmd/form"
 	"github.com/mulmuri/grassflow/cmd/help"
 	"github.com/mulmuri/grassflow/cmd/rollback"
-	"github.com/mulmuri/grassflow/cmd/static"
+	"github.com/mulmuri/grassflow/cmd/statistic"
 	"github.com/mulmuri/grassflow/cmd/version"
 )
 
@@ -22,14 +21,18 @@ func main() {
 
 	defer func() {
 		if err := recover(); err != nil {
-			log.Fatal(fmt.Errorf("panic recovered: %v", err))
+			log.Fatalf("panic recovered: %v", err)
 		}
 	}()
 
-	workflowName := os.Args[0]
-	newArgs := os.Args[1:]
+	workflowName := os.Args[1]
 
-	if (newArgs[0] == "-v" || newArgs[0] == "--version" || newArgs[0] == "v") {
+	var newArgs = []string{}
+	if len(os.Args) > 2 {
+		newArgs = os.Args[2:]
+	}
+
+	if (workflowName == "-v" || workflowName == "--version" || workflowName == "v") {
 		workflowName = "version"
 		newArgs = []string{}
 	}
@@ -44,8 +47,8 @@ func main() {
 	case rollback.WorkflowName:
 		err = rollback.Run(argument)
 	
-	case static.WorkflowName:
-		err = static.Run(argument)
+	case statistic.WorkflowName:
+		err = statistic.Run(argument)
 
 	case help.WorkflowName:
 		err = help.Run()
@@ -54,10 +57,10 @@ func main() {
 		version.Run()
 
 	default:
-		err = errors.New("unknown parameter")
+		err = fmt.Errorf("unknown parameter")
 	}
 
 	if err != nil {
-		log.Fatal(fmt.Errorf("failed to run workflow: %v", err))
+		log.Fatalf("failed to run workflow: %v", err)
 	}
 }
