@@ -1,0 +1,14 @@
+grassflow:
+  working-dir: '.'
+  main-branch: 'main'
+  task:
+  - name: "atcoder"
+    message: "solve problem {d}/ {n}"
+    branch: "codeforce"
+    dir: ["./codeforce"]
+    match: [".py", ".cpp"]
+  - name: "atcoder"
+    message: "solve file {d} / {f}"
+    branch: "atcoder"
+    dir: ["./atcoder"]
+    match: [".py", ".cpp"]
