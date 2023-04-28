@@ -3,17 +3,14 @@ package workflow
 import (
 	"context"
 	"os"
-	"path/filepath"
-	"strings"
 	"time"
 
-	"github.com/mulmuri/grassflow/internal/io"
 	"github.com/mulmuri/grassflow/internal/model"
-	"github.com/mulmuri/grassflow/internal/shell"
+	"github.com/mulmuri/grassflow/internal/task/format"
+	"github.com/mulmuri/grassflow/internal/task/git"
+	"github.com/mulmuri/grassflow/internal/task/io"
+	"github.com/mulmuri/grassflow/internal/task/shell"
 )
-
-
-
 
 
 
@@ -58,27 +55,27 @@ func Execute(mainBranch string, workingDir string, taskList []model.Task) error 
 			fileList = append(fileList, list...)
 		}
 
-		if err := shell.CreateCheckout(ctx, branch); err != nil {
+		if err := git.CreateCheckout(ctx, branch); err != nil {
 			return err
 		}
 
 		for _, file := range fileList {
 
-			var msg string
-			msg = strings.Replace(msgForm, "{d}", file.Parent, 1)
-			msg = strings.Replace(msg, "{f}", file.Name, 1)
-			msg = strings.Replace(msg, "{f-ext}", strings.TrimSuffix(file.Name, filepath.Ext(file.Name)), 1)
+			msg := msgForm
+			msg = format.ReplaceD(msg, file.Parent)
+			msg = format.ReplaceF(msg, file.Name)
+			msg = format.ReplaceN(msg, file.Name)
 
-			if err := shell.GitAdd(ctx, file.Path); err != nil {
+			if err := git.GitAdd(ctx, file.Path); err != nil {
 				return err
 			}
 
-			if err := shell.GitCommitWithDate(ctx, msg, file.ModTime); err != nil {
+			if err := git.GitCommitWithDate(ctx, msg, file.ModTime); err != nil {
 				return err
 			}			
 		}
 
-		if err := shell.Merge(ctx, mainBranch, branch); err != nil {
+		if err := git.Merge(ctx, mainBranch, branch); err != nil {
 			return err
 		}
 	}

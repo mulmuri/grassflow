@@ -12,7 +12,9 @@ import (
 
 func TestMain(m *testing.M) {
 
-	os.Chdir("../../test")
+	if err := os.Chdir("../../../test"); err != nil {
+		panic(err)
+	}
 
 	cmd := exec.Command("git", "init")
 	cmd.Run()
